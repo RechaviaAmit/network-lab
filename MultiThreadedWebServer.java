@@ -34,14 +34,26 @@ public class MultiThreadedWebServer {
             }
             else if (requestURI.endsWith(".jpg") || requestURI.endsWith(".bmp") || requestURI.endsWith("gif") || requestURI.endsWith("png")) {
                 serveImage(httpExchange);
-            } else {
+            } else if (requestURI.endsWith("/")) {
                 serveHtml(httpExchange);
+            } else {
+                serveUnRecognizedRequest(httpExchange);
             }
+        }
+
+        private void serveUnRecognizedRequest(HttpExchange httpExchange) throws IOException {
+            Headers responseHeaders = httpExchange.getResponseHeaders();
+            responseHeaders.set("Content-Type", "application/octet-stream");
+            // check
+            httpExchange.sendResponseHeaders(200, 0);
+
+            System.out.println("Response headers: " + responseHeaders.entrySet());
         }
 
         private void serveIcon(HttpExchange httpExchange) throws IOException {
             Headers responseHeaders = httpExchange.getResponseHeaders();
             responseHeaders.set("Content-Type", "icon");
+            // check
             httpExchange.sendResponseHeaders(200, 200);
 
             System.out.println("Response headers: " + responseHeaders.entrySet());
