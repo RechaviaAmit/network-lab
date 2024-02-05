@@ -7,6 +7,8 @@ public class HTTPRequest {
     public boolean isImage;
     public boolean isText;
     public boolean isIcon;
+
+    public boolean isChunked = false;
     private long contentLength;
     private String referer;
     private String userAgent;
@@ -46,6 +48,8 @@ public class HTTPRequest {
                 referer = line.substring(9);
             } else if (line.startsWith("User-Agent: ")) {
                 userAgent = line.substring(12);
+            } else if (line.replace(" ", "").equals("chunked:yes")) {
+                isChunked = true;
             }
         }
     }
