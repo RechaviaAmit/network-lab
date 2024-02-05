@@ -35,10 +35,16 @@ public class WebServer {
         private void handleClientConnection() throws IOException {
             try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                  PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
-                String request = in.readLine();
-                // Handle the request here. We're just echoing it back in this example.
-                out.println("Received your request: " + request);
-                System.out.println("Received your request: " + request);
+
+                StringBuilder requestBuilder = new StringBuilder();
+                String line;
+                while (!(line = in.readLine()).isEmpty()) {
+                    requestBuilder.append(line).append("\r\n");
+                }
+                HTTPRequest request = new HTTPRequest(requestBuilder.toString());
+
+                // Do something with the request. We're just echoing the request type and page back in this example.
+                out.println("Received your request: " + request.getType() + " " + request.getRequestedPage());
             } finally {
                 clientSocket.close();
             }
