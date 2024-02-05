@@ -21,7 +21,7 @@ public class HTTPRequest {
         if (requestedPage.equals("/")) {
             requestedPage = requestedPage + Config.properties.getProperty("defaultPage");
         }
-        isImage = requestedPage.matches(".*\\.(jpg|bmp|gif)$");
+        isImage = requestedPage.matches(".*\\.(jpg|bmp|gif|png)$");
 
         if (pageAndParams.length > 1) {
             String paramString = pageAndParams[1];
