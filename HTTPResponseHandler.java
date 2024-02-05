@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.nio.file.*;
 
 public class HTTPResponseHandler {
@@ -32,20 +33,44 @@ public class HTTPResponseHandler {
             contentType = "icon";
         }
         // Create HTTP response header
-        String responseHeader = String.format(
-                "HTTP/1.1 200 OK\r\n" +
-                        "content-type: %s\r\n" +
-                        "content-length: %d\r\n" +
-                        "\r\n", contentType, fileBytes.length);
+        String responseHeader;
+        if (request.isChunked) {
+            responseHeader = String.format(
+                    "HTTP/1.1 200 OK\r\n" +
+                            "content-type: %s\r\n" +
+                            "Transfer-Encoding: chunked\r\n" +
+                            "\r\n", contentType);
+        } else {
+            responseHeader = String.format(
+                    "HTTP/1.1 200 OK\r\n" +
+                            "content-type: %s\r\n" +
+                            "content-length: %d\r\n" +
+                            "\r\n", contentType, fileBytes.length);
+        }
 
         // Print the header
         System.out.println(responseHeader);
 
         // Send full response to client
         out.write(responseHeader.getBytes());
-        out.write(fileBytes);
+        if (request.isChunked) {
+            ByteBuffer.wrap(fileBytes).asCharBuffer().chars().forEach(c -> {
+                try {
+                    String chunkSize = Integer.toHexString(1024); // Each chunk is 1 byte
+                    out.write((chunkSize + "\r\n").getBytes());
+                    out.write(c);
+                    out.write("\r\n".getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            out.write("0\r\n\r\n".getBytes()); // Last chunk
+        } else {
+            out.write(fileBytes);
+        }
         out.flush();
     }
+
 
     public void sendErrorResponse(int statusCode, String statusMessage, DataOutputStream out) throws IOException {
         String response = String.format(

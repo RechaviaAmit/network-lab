@@ -7,7 +7,6 @@ public class HTTPRequest {
     public boolean isImage;
     public boolean isText;
     public boolean isIcon;
-
     public boolean isChunked = false;
     private long contentLength;
     private String referer;
