@@ -2,7 +2,7 @@ import java.io.*;
 import java.nio.file.*;
 
 public class HTTPResponseHandler {
-    private static final String WWWROOT = "/www/lab/html";
+    private static final String WWWROOT = "www/lab/html";
     private HTTPRequest request;
     private PrintWriter out;
 
