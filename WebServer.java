@@ -41,10 +41,11 @@ public class WebServer {
                 while (!(line = in.readLine()).isEmpty()) {
                     requestBuilder.append(line).append("\r\n");
                 }
+                // the ask to print the request
+                System.out.println(requestBuilder.toString());
                 HTTPRequest request = new HTTPRequest(requestBuilder.toString());
 
-                // Do something with the request. We're just echoing the request type and page back in this example.
-                out.println("Received your request: " + request.getType() + " " + request.getRequestedPage());
+
             } finally {
                 clientSocket.close();
             }
