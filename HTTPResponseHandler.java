@@ -17,7 +17,6 @@ public class HTTPResponseHandler {
             sendErrorResponse(501, "Not Implemented", out);
             return;
         }
-        // Check if the file exists
 
         byte[] fileBytes = null;
 
