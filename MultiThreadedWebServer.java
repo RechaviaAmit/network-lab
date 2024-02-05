@@ -58,7 +58,7 @@ public class MultiThreadedWebServer {
             byte[] response = Files.readAllBytes(Paths.get(imgName));
 
             Headers responseHeaders = httpExchange.getResponseHeaders();
-            responseHeaders.set("Content-Type", "image/jpeg");
+            responseHeaders.set("Content-Type", "image");
             httpExchange.sendResponseHeaders(200, response.length);
 
             System.out.println("Response headers: " + responseHeaders.entrySet());
