@@ -48,7 +48,7 @@ public class WebServer {
                     // they ask to print the request
                     System.out.println(requestBuilder);
                     HTTPRequest request = new HTTPRequest(requestBuilder.toString());
-                    new HTTPResponseHandler(request, out).handle();
+                    new HTTPResponseHandler().handle(request, out);
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
