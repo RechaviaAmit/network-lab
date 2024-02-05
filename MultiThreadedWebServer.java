@@ -1,8 +1,13 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MultiThreadedWebServer {
 
@@ -37,9 +42,12 @@ public class MultiThreadedWebServer {
                     OutputStream outputStream = clientSocket.getOutputStream()
             ) {
                 String request = reader.readLine();
-                if (request != null && request.startsWith("GET")) {
-                    String htmlContent = readHtmlFromFile("site.html");
-                    sendHtmlResponse(outputStream, htmlContent);
+                if (request != null) {
+                    if (request.contains(".jpg")) {
+                        serveImage(outputStream, request);
+                    } else if (request.startsWith("GET")) {
+                        serveHtml(outputStream);
+                    }
                 }
             } catch (IOException e) {
                 System.err.println("Error handling request: " + e.getMessage());
@@ -50,6 +58,23 @@ public class MultiThreadedWebServer {
                     e.printStackTrace();
                 }
             }
+        }
+
+        private void serveHtml(OutputStream outputStream) throws IOException {
+            String htmlContent = readHtmlFromFile("site.html");
+            sendHtmlResponse(outputStream, htmlContent);
+        }
+
+        private void serveImage(OutputStream outputStream, String request) throws IOException {
+            String imgName = "";
+            String pattern = "GET /([^\\s]+) HTTP/1.1";
+            Pattern regex = Pattern.compile(pattern);
+            Matcher matcher = regex.matcher(request);
+            if (matcher.find()) {
+                imgName = matcher.group(1);
+            }
+            byte[] imageBytes = readImageFromFile(imgName);
+            sendImageResponse(outputStream, imageBytes);
         }
 
         private String readHtmlFromFile(String filename) throws IOException {
@@ -63,6 +88,11 @@ public class MultiThreadedWebServer {
             return content.toString();
         }
 
+        private byte[] readImageFromFile(String filename) throws IOException {
+            Path path = Paths.get(filename);
+            return Files.readAllBytes(path);
+        }
+
         private void sendHtmlResponse(OutputStream outputStream, String htmlContent) throws IOException {
             String response = "HTTP/1.1 200 OK\r\n" +
                     "Content-Type: text/html\r\n" +
@@ -70,6 +100,16 @@ public class MultiThreadedWebServer {
                     htmlContent;
 
             outputStream.write(response.getBytes());
+            outputStream.flush();
+        }
+
+        private void sendImageResponse(OutputStream outputStream, byte[] imageBytes) throws IOException {
+            String response = "HTTP/1.1 200 OK\r\n" +
+                    "Content-Type: image/jpeg\r\n" +
+                    "\r\n";
+
+            outputStream.write(response.getBytes());
+            outputStream.write(imageBytes);
             outputStream.flush();
         }
     }
