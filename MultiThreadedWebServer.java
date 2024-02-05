@@ -40,7 +40,12 @@ public class MultiThreadedWebServer {
         private void serveHtml(HttpExchange httpExchange) throws IOException {
             byte[] response = Files.readAllBytes(Paths.get("site.html"));
 
+            Headers responseHeaders = httpExchange.getResponseHeaders();
+            responseHeaders.set("Content-Type", "text/html");
             httpExchange.sendResponseHeaders(200, response.length);
+
+            System.out.println("Response headers: " + responseHeaders.entrySet());
+
             OutputStream os = httpExchange.getResponseBody();
             os.write(response);
             os.close();
@@ -52,7 +57,12 @@ public class MultiThreadedWebServer {
 
             byte[] response = Files.readAllBytes(Paths.get(imgName));
 
+            Headers responseHeaders = httpExchange.getResponseHeaders();
+            responseHeaders.set("Content-Type", "image/jpeg");
             httpExchange.sendResponseHeaders(200, response.length);
+
+            System.out.println("Response headers: " + responseHeaders.entrySet());
+
             OutputStream os = httpExchange.getResponseBody();
             os.write(response);
             os.close();
