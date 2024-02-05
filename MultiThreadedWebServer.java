@@ -25,6 +25,9 @@ public class MultiThreadedWebServer {
     static class RequestHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
+            Headers requestHeaders = httpExchange.getRequestHeaders();
+            System.out.println("Request headers: " + requestHeaders.entrySet());
+
             String requestURI = httpExchange.getRequestURI().toString();
 
             if (requestURI.endsWith(".jpg")) {
@@ -55,4 +58,4 @@ public class MultiThreadedWebServer {
             os.close();
         }
     }
-}  
+}
