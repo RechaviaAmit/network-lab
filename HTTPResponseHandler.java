@@ -1,6 +1,8 @@
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.file.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class HTTPResponseHandler {
     private static final String WWWROOT = Config.properties.getProperty("root");
@@ -9,12 +11,11 @@ public class HTTPResponseHandler {
     }
 
     public void handle(HTTPRequest request, DataOutputStream out) throws IOException {
-        // Check HTTP method
-        if (!request.getType().equalsIgnoreCase("GET")) {
+        List<String> supportedMethods = Arrays.asList("GET", "POST", "HEAD", "TRACE");
+        if (!supportedMethods.contains(request.getType())) {
             sendErrorResponse(501, "Not Implemented", out);
             return;
         }
-
         // Check if the file exists
         Path filePath = Paths.get(WWWROOT + request.getRequestedPage());
         if (!Files.exists(filePath)) {

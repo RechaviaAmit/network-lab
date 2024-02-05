@@ -45,6 +45,10 @@ public class WebServer {
                     while (!(line = in.readLine()).isEmpty()) {
                         requestBuilder.append(line).append("\r\n");
                     }
+
+                    while (in.ready()) {
+                        requestBuilder.append((char) in.read());
+                    }
                     // they ask to print the request
                     System.out.println(requestBuilder);
                     HTTPResponseHandler httpResponseHandler = new HTTPResponseHandler();
