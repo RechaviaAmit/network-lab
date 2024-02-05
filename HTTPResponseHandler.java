@@ -1,5 +1,7 @@
 import java.io.*;
 import java.nio.file.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class HTTPResponseHandler {
     private static final String WWWROOT = Config.properties.getProperty("root");
@@ -12,8 +14,9 @@ public class HTTPResponseHandler {
     }
 
     public void handle() throws IOException {
+        List<String> supportedMethods = Arrays.asList("GET", "POST", "HEAD", "TRACE");
         // Check HTTP method
-        if (!request.getType().equalsIgnoreCase("GET")) {
+        if (!supportedMethods.contains(request.getType().toUpperCase())) {
             sendErrorResponse(501, "Not Implemented");
             return;
         }
