@@ -41,7 +41,7 @@ public class MultiThreadedWebServer {
             ) {
                 String request = reader.readLine();
                 if (request != null && request.startsWith("GET")) {
-                    sendResponse(outputStream, "HTTP/1.1 200 OK\r\n\r\nHI!");
+                    sendHtmlResponse(outputStream, "<html><body><h1>Hi there!</h1></body></html>");
                 }
             } catch (IOException e) {
                 System.err.println("Error handling request: " + e.getMessage());
@@ -52,6 +52,16 @@ public class MultiThreadedWebServer {
                     e.printStackTrace();
                 }
             }
+        }
+
+        private void sendHtmlResponse(OutputStream outputStream, String htmlContent) throws IOException {
+            String response = "HTTP/1.1 200 OK\r\n" +
+                    "Content-Type: text/html\r\n" +
+                    "\r\n" +
+                    htmlContent;
+
+            outputStream.write(response.getBytes());
+            outputStream.flush();
         }
 
         private void sendResponse(OutputStream outputStream, String response) throws IOException {
