@@ -5,6 +5,8 @@ public class HTTPRequest {
     private String type;
     private String requestedPage;
     public boolean isImage;
+    public boolean isText;
+    public boolean isIcon;
     private long contentLength;
     private String referer;
     private String userAgent;
@@ -25,6 +27,8 @@ public class HTTPRequest {
         requestedPage = requestedPage.replace("/../", "/");
 
         isImage = requestedPage.matches(".*\\.(jpg|bmp|gif|png)$");
+        isText = requestedPage.matches(".*\\.(html)$");
+        isIcon = requestedPage.matches(".*\\.(ico)$");
 
         if (pageAndParams.length > 1) {
             String paramString = pageAndParams[1];

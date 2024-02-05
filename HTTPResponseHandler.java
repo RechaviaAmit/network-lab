@@ -23,7 +23,14 @@ public class HTTPResponseHandler {
 
         // Read the file's content
         byte[] fileBytes = Files.readAllBytes(filePath);
-        String contentType = request.isImage ? "image" : "text/html";
+        String contentType = "application/octet-stream";
+        if (request.isImage) {
+            contentType = "image";
+        } else if (request.isText) {
+            contentType = "text/html";
+        } else if (request.isIcon) {
+            contentType = "icon";
+        }
         // Create HTTP response header
         String responseHeader = String.format(
                 "HTTP/1.1 200 OK\r\n" +
