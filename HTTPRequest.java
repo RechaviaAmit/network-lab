@@ -19,7 +19,7 @@ public class HTTPRequest {
         String[] pageAndParams = requestLine[1].split("\\?");
         requestedPage = pageAndParams[0];
         if (requestedPage.equals("/")) {
-            requestedPage = Config.properties.getProperty("defaultPage");
+            requestedPage = requestedPage + Config.properties.getProperty("defaultPage");
         }
         isImage = requestedPage.matches(".*\\.(jpg|bmp|gif)$");
 
