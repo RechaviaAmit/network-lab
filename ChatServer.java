@@ -1,13 +1,10 @@
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 public class ChatServer {
-    private static final int PORT = 9922;
+    private static int PORT;
     private static int userCount = -1;
     private static List<ChatHandler> handlers = new ArrayList<>();
     private static final int MAX_THREADS = 3;
@@ -15,6 +12,11 @@ public class ChatServer {
 
     public static void main(String[] args) throws UnknownHostException {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+            Properties prop = new Properties();
+            try (FileInputStream fis = new FileInputStream("config.ini")) {
+                prop.load(fis);
+                PORT = Integer.parseInt(prop.getProperty("port"));
+            }
             System.out.println("Chat server started on port " + PORT);
 
             while (true) {
