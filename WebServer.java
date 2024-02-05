@@ -44,7 +44,7 @@ public class WebServer {
                 // they ask to print the request
                 System.out.println(requestBuilder.toString());
                 HTTPRequest request = new HTTPRequest(requestBuilder.toString());
-                HTTPResponseHandler responseHandler = new HTTPResponseHandler(request, out);
+                new HTTPResponseHandler(request, out).handle();
 
             } finally {
                 clientSocket.close();
