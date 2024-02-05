@@ -38,7 +38,7 @@ public class MultiThreadedWebServer {
             ) {
                 String request = reader.readLine();
                 if (request != null && request.startsWith("GET")) {
-                    String htmlContent = readHtmlFromFile("index.html");
+                    String htmlContent = readHtmlFromFile("site.html");
                     sendHtmlResponse(outputStream, htmlContent);
                 }
             } catch (IOException e) {
