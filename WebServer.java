@@ -34,11 +34,11 @@ public class WebServer {
 
         private void handleClientConnection() throws IOException {
             BufferedReader in = null;
-            PrintWriter out = null;
+            DataOutputStream out = null;
             try {
                 while (true) {
                     in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                    out = new PrintWriter(clientSocket.getOutputStream(), true);
+                    out = new DataOutputStream(clientSocket.getOutputStream());
 
                     StringBuilder requestBuilder = new StringBuilder();
                     String line;

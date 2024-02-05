@@ -4,9 +4,9 @@ import java.nio.file.*;
 public class HTTPResponseHandler {
     private static final String WWWROOT = Config.properties.getProperty("root");
     private HTTPRequest request;
-    private PrintWriter out;
+    private DataOutputStream out;
 
-    public HTTPResponseHandler(HTTPRequest request, PrintWriter out) {
+    public HTTPResponseHandler(HTTPRequest request, DataOutputStream out) {
         this.request = request;
         this.out = out;
     }
@@ -28,31 +28,31 @@ public class HTTPResponseHandler {
         // Read the file's content
         byte[] fileBytes = Files.readAllBytes(filePath);
         String fileContent = new String(fileBytes);
-
+        String contentType = request.isImage ? "image" : "text/html";
         // Create HTTP response header
         String responseHeader = String.format(
                 "HTTP/1.1 200 OK\r\n" +
-                        "content-type: text/html\r\n" +
+                        "content-type: %s\r\n" +
                         "content-length: %d\r\n" +
-                        "\r\n", fileBytes.length);
+                        "\r\n", contentType, fileBytes.length);
 
         // Print the header
         System.out.println(responseHeader);
 
         // Send full response to client
-        out.write(responseHeader);
-        out.write(fileContent);
+        out.write(responseHeader.getBytes());
+        out.write(fileBytes);
         out.flush();
     }
 
-    private void sendErrorResponse(int statusCode, String statusMessage) {
+    private void sendErrorResponse(int statusCode, String statusMessage) throws IOException {
         String response = String.format(
                 "HTTP/1.1 %d %s\r\n" +
                         "content-type: text/plain\r\n" +
                         "\r\n" +
                         "%d %s\r\n", statusCode, statusMessage, statusCode, statusMessage);
 
-        out.write(response);
+        out.write(response.getBytes());
         out.flush();
     }
 }
