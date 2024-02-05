@@ -3,8 +3,8 @@ import java.net.*;
 import java.util.concurrent.*;
 
 public class WebServer {
-    private static final int PORT = 8080;
-    private static final int MAX_CONNECTIONS = 10;
+    private static final int PORT = Integer.parseInt(Config.properties.getProperty("port"));
+    private static final int MAX_CONNECTIONS = Integer.parseInt(Config.properties.getProperty("maxThreads"));
 
     public static void main(String[] args) throws IOException {
         ExecutorService executorService = Executors.newFixedThreadPool(MAX_CONNECTIONS);
