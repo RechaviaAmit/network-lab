@@ -21,6 +21,9 @@ public class HTTPRequest {
         if (requestedPage.equals("/")) {
             requestedPage = requestedPage + Config.properties.getProperty("defaultPage");
         }
+        // Do not allow users to surf “outside” the server’s root directory
+        requestedPage = requestedPage.replace("/../", "/");
+
         isImage = requestedPage.matches(".*\\.(jpg|bmp|gif|png)$");
 
         if (pageAndParams.length > 1) {
