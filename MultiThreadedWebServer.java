@@ -30,7 +30,7 @@ public class MultiThreadedWebServer {
 
             String requestURI = httpExchange.getRequestURI().toString();
 
-            if (requestURI.endsWith(".jpg")) {
+            if (requestURI.endsWith(".jpg") || requestURI.endsWith(".bmp") || requestURI.endsWith("gif") || requestURI.endsWith("png")) {
                 serveImage(httpExchange);
             } else {
                 serveHtml(httpExchange);
