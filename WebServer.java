@@ -38,6 +38,7 @@ public class WebServer {
                 String request = in.readLine();
                 // Handle the request here. We're just echoing it back in this example.
                 out.println("Received your request: " + request);
+                System.out.println("Received your request: " + request);
             } finally {
                 clientSocket.close();
             }
