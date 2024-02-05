@@ -29,12 +29,22 @@ public class MultiThreadedWebServer {
             System.out.println("Request headers: " + requestHeaders.entrySet());
 
             String requestURI = httpExchange.getRequestURI().toString();
-
-            if (requestURI.endsWith(".jpg") || requestURI.endsWith(".bmp") || requestURI.endsWith("gif") || requestURI.endsWith("png")) {
+            if (requestURI.endsWith("ico")) {
+                serveIcon(httpExchange);
+            }
+            else if (requestURI.endsWith(".jpg") || requestURI.endsWith(".bmp") || requestURI.endsWith("gif") || requestURI.endsWith("png")) {
                 serveImage(httpExchange);
             } else {
                 serveHtml(httpExchange);
             }
+        }
+
+        private void serveIcon(HttpExchange httpExchange) throws IOException {
+            Headers responseHeaders = httpExchange.getResponseHeaders();
+            responseHeaders.set("Content-Type", "icon");
+            httpExchange.sendResponseHeaders(200, 200);
+
+            System.out.println("Response headers: " + responseHeaders.entrySet());
         }
 
         private void serveHtml(HttpExchange httpExchange) throws IOException {
