@@ -54,18 +54,26 @@ public class HTTPResponseHandler {
         // Send full response to client
         out.write(responseHeader.getBytes());
         if (request.isChunked) {
-            ByteBuffer.wrap(fileBytes).asCharBuffer().chars().forEach(c -> {
-                try {
-                    String chunkSize = Integer.toHexString(1024); // Each chunk is 1 byte
-                    out.write((chunkSize + "\r\n").getBytes());
-                    out.write(c);
-                    out.write("\r\n".getBytes());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+            int chunkSizeBytes = 1024; // Size of each chunk
+            int start = 0;
+
+            while (start < fileBytes.length) {
+                int end = Math.min(start + chunkSizeBytes, fileBytes.length);
+                int chunkLength = end - start;
+
+                // Write chunk size in hex
+                String chunkSizeHex = Integer.toHexString(chunkLength) + "\r\n";
+                out.write(chunkSizeHex.getBytes());
+
+                // Write chunk data
+                out.write(fileBytes, start, chunkLength);
+
+                // Write end of chunk
+                out.write("\r\n".getBytes());
+                start = end;
+            }
             out.write("0\r\n\r\n".getBytes()); // Last chunk
-        } else {
+        }  else {
             out.write(fileBytes);
         }
         out.flush();
