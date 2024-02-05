@@ -38,7 +38,7 @@ public class MultiThreadedWebServer {
         }
 
         private void serveHtml(HttpExchange httpExchange) throws IOException {
-            byte[] response = Files.readAllBytes(Paths.get("site.html"));
+            byte[] response = Files.readAllBytes(Paths.get("index.html"));
 
             Headers responseHeaders = httpExchange.getResponseHeaders();
             responseHeaders.set("Content-Type", "text/html");
