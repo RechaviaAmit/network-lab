@@ -11,7 +11,7 @@ public class HTTPRequest {
     private long contentLength;
     private String referer;
     private String userAgent;
-    private Map<String, String> parameters = new HashMap<>();
+    public Map<String, String> parameters = new HashMap<>();
 
     public HTTPRequest(String requestHeader) {
         String[] lines = requestHeader.split("\r\n");
@@ -49,6 +49,12 @@ public class HTTPRequest {
                 userAgent = line.substring(12);
             } else if (line.replace(" ", "").equals("chunked:yes")) {
                 isChunked = true;
+            } else if (line.contains("&")) {
+                String[] paramPairs = line.split("&");
+                for (String pair : paramPairs) {
+                    String[] keyValue = pair.split("=");
+                    parameters.put(keyValue[0], keyValue[1]);
+                }
             }
         }
     }
