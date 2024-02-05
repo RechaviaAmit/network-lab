@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Website</title>
+    <style>
+        h1 {
+            color: red;
+        }
+
+        .moving-title {
+            color: blue;
+            animation: moveTitle 5s infinite;
+        }
+
+        @keyframes moveTitle {
+            0% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(100px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="moving-title">Computer networks 2023: Exercise 1</h1>
+    <h1>Amit Rechavia</h1>
+    <a href="https://medium.com/">Medium</a>
+    <hr>
+    <div class="image-container">
+        <img src="jim.jpg" alt="Jim Picture">
+        <img src="pam.jpg" alt="Pam Picture">
+    </div>
+    <a href="https://moodle.runi.ac.il/2024/course/view.php?id=2401572">Moodle Course</a>
+    <form>
+        <label for="sender">Sender:</label>
+        <input type="text" id="sender" name="sender"><br><br>
+        
+        <label for="receiver">Receiver:</label>
+        <input type="text" id="receiver" name="receiver"><br><br>
+        
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject"><br><br>
+        
+        <label for="message">Message:</label><br>
+        <textarea id="message" name="message" rows="4" cols="50"></textarea><br><br>
+        
+        <input type="submit" value="Submit">
+    </form>
+</body>
