@@ -40,7 +40,7 @@ public class HTTPResponseHandler {
         out.flush();
     }
 
-    private void sendErrorResponse(int statusCode, String statusMessage, DataOutputStream out) throws IOException {
+    public void sendErrorResponse(int statusCode, String statusMessage, DataOutputStream out) throws IOException {
         String response = String.format(
                 "HTTP/1.1 %d %s\r\n" +
                         "content-type: text/plain\r\n" +

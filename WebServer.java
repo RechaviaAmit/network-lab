@@ -47,8 +47,20 @@ public class WebServer {
                     }
                     // they ask to print the request
                     System.out.println(requestBuilder);
-                    HTTPRequest request = new HTTPRequest(requestBuilder.toString());
-                    new HTTPResponseHandler().handle(request, out);
+                    HTTPResponseHandler httpResponseHandler = new HTTPResponseHandler();
+                    HTTPRequest request = null;
+                    try {
+                        request = new HTTPRequest(requestBuilder.toString());;
+                    } catch (Exception e) {
+                        httpResponseHandler.sendErrorResponse(400, "Bad Request", out);
+                    }
+                    if (request != null) {
+                        try {
+                            httpResponseHandler.handle(request, out);
+                        } catch (Exception e) {
+                            httpResponseHandler.sendErrorResponse(500, "Internal Server Error", out);
+                        }
+                    }
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
