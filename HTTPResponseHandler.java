@@ -3,6 +3,7 @@ import java.nio.ByteBuffer;
 import java.nio.file.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class HTTPResponseHandler {
     private static final String WWWROOT = Config.properties.getProperty("root");
@@ -17,14 +18,30 @@ public class HTTPResponseHandler {
             return;
         }
         // Check if the file exists
-        Path filePath = Paths.get(WWWROOT + request.getRequestedPage());
-        if (!Files.exists(filePath)) {
-            sendErrorResponse(404, "Not Found", out);
-            return;
+
+        byte[] fileBytes = null;
+
+        if (request.getRequestedPage().equals("/params_info.html")) {
+            StringBuilder html = new StringBuilder();
+            html.append("<ul>\n");
+
+            for (Map.Entry<String, String> entry : request.parameters.entrySet()) {
+                html.append("<li>").append(entry.getKey()).append(": ").append(entry.getValue()).append("</li>\n");
+            }
+            html.append("</ul>\n");
+            fileBytes = html.toString().getBytes();
+        }
+
+        else {
+            Path filePath = Paths.get(WWWROOT + request.getRequestedPage());
+            if (!Files.exists(filePath)) {
+                sendErrorResponse(404, "Not Found", out);
+                return;
+            }
+            fileBytes = Files.readAllBytes(filePath);
         }
 
         // Read the file's content
-        byte[] fileBytes = Files.readAllBytes(filePath);
         String contentType = "application/octet-stream";
         if (request.isImage) {
             contentType = "image";
