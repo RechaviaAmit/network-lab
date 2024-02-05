@@ -14,8 +14,20 @@ public class HTTPRequest {
         String[] lines = requestHeader.split("\r\n");
         String[] requestLine = lines[0].split(" ");
         type = requestLine[0];
-        requestedPage = requestLine[1];
+
+        // Split requested page and parameters  
+        String[] pageAndParams = requestLine[1].split("\\?");
+        requestedPage = pageAndParams[0];
         isImage = requestedPage.matches(".*\\.(jpg|bmp|gif)$");
+
+        if (pageAndParams.length > 1) {
+            String paramString = pageAndParams[1];
+            String[] paramPairs = paramString.split("&");
+            for (String pair : paramPairs) {
+                String[] keyValue = pair.split("=");
+                parameters.put(keyValue[0], keyValue[1]);
+            }
+        }
 
         for (String line : lines) {
             if (line.startsWith("Content-Length: ")) {
@@ -24,15 +36,6 @@ public class HTTPRequest {
                 referer = line.substring(9);
             } else if (line.startsWith("User-Agent: ")) {
                 userAgent = line.substring(12);
-            }
-        }
-
-        if (type.equalsIgnoreCase("GET") && requestedPage.contains("?")) {
-            String paramString = requestedPage.split("\\?")[1];
-            String[] paramPairs = paramString.split("&");
-            for (String pair : paramPairs) {
-                String[] keyValue = pair.split("=");
-                parameters.put(keyValue[0], keyValue[1]);
             }
         }
     }
@@ -44,4 +47,6 @@ public class HTTPRequest {
     public String getRequestedPage() {
         return requestedPage;
     }
-}
+
+    // Getters and setters omitted for brevity.  
+}  
