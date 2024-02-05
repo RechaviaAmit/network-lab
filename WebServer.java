@@ -46,7 +46,7 @@ public class WebServer {
                         requestBuilder.append(line).append("\r\n");
                     }
                     // they ask to print the request
-                    System.out.println(requestBuilder.toString());
+                    System.out.println(requestBuilder);
                     HTTPRequest request = new HTTPRequest(requestBuilder.toString());
                     new HTTPResponseHandler(request, out).handle();
                 }
