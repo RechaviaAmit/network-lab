@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -41,7 +38,8 @@ public class MultiThreadedWebServer {
             ) {
                 String request = reader.readLine();
                 if (request != null && request.startsWith("GET")) {
-                    sendHtmlResponse(outputStream, "<html><body><h1>Hi there!</h1></body></html>");
+                    String htmlContent = readHtmlFromFile("index.html");
+                    sendHtmlResponse(outputStream, htmlContent);
                 }
             } catch (IOException e) {
                 System.err.println("Error handling request: " + e.getMessage());
@@ -54,17 +52,23 @@ public class MultiThreadedWebServer {
             }
         }
 
+        private String readHtmlFromFile(String filename) throws IOException {
+            StringBuilder content = new StringBuilder();
+            try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    content.append(line).append("\n");
+                }
+            }
+            return content.toString();
+        }
+
         private void sendHtmlResponse(OutputStream outputStream, String htmlContent) throws IOException {
             String response = "HTTP/1.1 200 OK\r\n" +
                     "Content-Type: text/html\r\n" +
                     "\r\n" +
                     htmlContent;
 
-            outputStream.write(response.getBytes());
-            outputStream.flush();
-        }
-
-        private void sendResponse(OutputStream outputStream, String response) throws IOException {
             outputStream.write(response.getBytes());
             outputStream.flush();
         }
