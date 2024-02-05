@@ -4,7 +4,7 @@ import java.util.Map;
 public class HTTPRequest {
     private String type;
     private String requestedPage;
-    private boolean isImage;
+    public boolean isImage;
     private long contentLength;
     private String referer;
     private String userAgent;
@@ -49,6 +49,10 @@ public class HTTPRequest {
 
     public String getRequestedPage() {
         return requestedPage;
+    }
+
+    public boolean isImage() {
+        return isImage;
     }
 
     // Getters and setters omitted for brevity.  
