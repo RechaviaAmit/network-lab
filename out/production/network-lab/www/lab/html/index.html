@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>My Website</title>
+    <style>
+        h1 {
+            color: red;
+        }
+
+        .moving-title {
+            color: blue;
+            animation: moveTitle 5s infinite;
+        }
+
+        @keyframes moveTitle {
+            0% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(100px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="moving-title">Computer networks 2023: Exercise 1</h1>
+    <h1>Amit Rechavia</h1>
+    <a href="https://medium.com/">Medium</a>
+    <hr>
+    <div class="image-container">
+        <img src="jim.jpg" alt="Jim Picture">
+        <img src="pam.jpg" alt="Pam Picture">
+    </div>
+    <a href="https://moodle.runi.ac.il/2024/course/view.php?id=2401572">Moodle Course</a>
+    <form action="params_info.html" method="POST">
+        <table style="...">
+            <tr>
+                <td>Sender:</td>
+                <td><input type="text" name="sender"></td>
+            </tr>
+            <tr>
+                <td>Receiver:</td>
+                <td><input type="text" name="receiver"></td>
+            </tr>
+            <tr>
+                <td>Subject:</td>
+                <td><input type="text" name="subject"></td>
+            </tr>
+            <tr>
+                <td>Message:</td>
+                <td><textarea name="message"></textarea></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><button type="submit">Submit</button></td>
+            </tr>
+        </table>
+    </form>
+</body>

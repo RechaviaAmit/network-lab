@@ -48,13 +48,16 @@ public class WebServer {
 
                     while (in.ready()) {
                         requestBuilder.append((char) in.read());
+                        if (!in.ready()) {
+                            requestBuilder.append("\r\n");
+                        }
                     }
                     // they ask to print the request
                     System.out.println(requestBuilder);
                     HTTPResponseHandler httpResponseHandler = new HTTPResponseHandler();
                     HTTPRequest request = null;
                     try {
-                        request = new HTTPRequest(requestBuilder.toString());;
+                        request = new HTTPRequest(requestBuilder.toString());
                     } catch (Exception e) {
                         httpResponseHandler.sendErrorResponse(400, "Bad Request", out);
                     }

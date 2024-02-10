@@ -18,6 +18,11 @@ public class HTTPResponseHandler {
             return;
         }
 
+        if (!request.isHttp) {
+            sendErrorResponse(400, "Bad Request", out);
+            return;
+        }
+
         byte[] fileBytes = null;
 
         if (request.getRequestedPage().equals("/params_info.html")) {
@@ -104,6 +109,7 @@ public class HTTPResponseHandler {
                         "\r\n" +
                         "%d %s\r\n", statusCode, statusMessage, statusCode, statusMessage);
 
+        System.out.println(response);
         out.write(response.getBytes());
         out.flush();
     }

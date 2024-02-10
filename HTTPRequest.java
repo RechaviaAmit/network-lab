@@ -8,6 +8,7 @@ public class HTTPRequest {
     public boolean isText;
     public boolean isIcon;
     public boolean isChunked = false;
+    public boolean isHttp;
     private long contentLength;
     private String referer;
     private String userAgent;
@@ -35,13 +36,17 @@ public class HTTPRequest {
             String paramString = pageAndParams[1];
             String[] paramPairs = paramString.split("&");
             for (String pair : paramPairs) {
-                String[] keyValue = pair.split("=");
-                parameters.put(keyValue[0], keyValue[1]);
+                int index = pair.indexOf("=");
+                String key = pair.substring(0,index);
+                String value = pair.substring(index+1);
+                parameters.put(key, value);
             }
         }
 
         for (String line : lines) {
-            if (line.startsWith("Content-Length: ")) {
+            if (line.contains("HTTP")) {
+                isHttp = true;
+            } else if (line.startsWith("Content-Length: ")) {
                 contentLength = Long.parseLong(line.substring(16));
             } else if (line.startsWith("Referer: ")) {
                 referer = line.substring(9);
@@ -52,8 +57,10 @@ public class HTTPRequest {
             } else if (line.contains("&")) {
                 String[] paramPairs = line.split("&");
                 for (String pair : paramPairs) {
-                    String[] keyValue = pair.split("=");
-                    parameters.put(keyValue[0], keyValue[1]);
+                    int index = pair.indexOf("=");
+                    String key = pair.substring(0,index);
+                    String value = pair.substring(index+1);
+                    parameters.put(key, value);
                 }
             }
         }
